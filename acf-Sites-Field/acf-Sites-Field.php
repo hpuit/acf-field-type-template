@@ -1,12 +1,12 @@
 <?php
 
 /*
-Plugin Name: Advanced Custom Fields: FIELD_LABEL
-Plugin URI: PLUGIN_URL
-Description: SHORT_DESCRIPTION
+Plugin Name: Advanced Custom Fields: Sites Field
+Plugin URI: https://github.com/hpuit/acf-field-type-template
+Description: custom acf field type for sites
 Version: 1.0.0
-Author: AUTHOR_NAME
-Author URI: AUTHOR_URL
+Author: Kevin Saylor
+Author URI: https://www.kevinsaylor.me
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -16,9 +16,9 @@ if( ! defined( 'ABSPATH' ) ) exit;
 
 
 // check if class already exists
-if( !class_exists('NAMESPACE_acf_plugin_FIELD_NAME') ) :
+if( !class_exists('hpu_acf_plugin_sites_field') ) :
 
-class NAMESPACE_acf_plugin_FIELD_NAME {
+class hpu_acf_plugin_sites_field {
 	
 	// vars
 	var $settings;
@@ -73,19 +73,19 @@ class NAMESPACE_acf_plugin_FIELD_NAME {
 		if( !$version ) $version = 4;
 		
 		
-		// load textdomain
-		load_plugin_textdomain( 'TEXTDOMAIN', false, plugin_basename( dirname( __FILE__ ) ) . '/lang' ); 
+		// load acf-sites-field
+		load_plugin_textdomain( 'acf-sites-field', false, plugin_basename( dirname( __FILE__ ) ) . '/lang' ); 
 		
 		
 		// include
-		include_once('fields/class-NAMESPACE-acf-field-FIELD-NAME-v' . $version . '.php');
+		include_once(plugin_dir_path( __FILE__ ) . '/fields/class-hpu-acf-field-sites-field-v' . $version . '.php');
 	}
 	
 }
 
 
 // initialize
-new NAMESPACE_acf_plugin_FIELD_NAME();
+new hpu_acf_plugin_sites_field();
 
 
 // class_exists check

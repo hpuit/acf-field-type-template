@@ -5,10 +5,10 @@ if( ! defined( 'ABSPATH' ) ) exit;
 
 
 // check if class already exists
-if( !class_exists('NAMESPACE_acf_field_FIELD_NAME') ) :
+if( !class_exists('hpu_acf_field_sites_field') ) :
 
 
-class NAMESPACE_acf_field_FIELD_NAME extends acf_field {
+class hpu_acf_field_sites_field extends acf_field {
 	
 	
 	/*
@@ -30,14 +30,14 @@ class NAMESPACE_acf_field_FIELD_NAME extends acf_field {
 		*  name (string) Single word, no spaces. Underscores allowed
 		*/
 		
-		$this->name = 'FIELD_NAME';
+		$this->name = 'sites_field';
 		
 		
 		/*
 		*  label (string) Multiple words, can include spaces, visible when selecting a field type
 		*/
 		
-		$this->label = __('FIELD_LABEL', 'TEXTDOMAIN');
+		$this->label = __('Sites Field', 'acf-sites-field');
 		
 		
 		/*
@@ -58,11 +58,11 @@ class NAMESPACE_acf_field_FIELD_NAME extends acf_field {
 		
 		/*
 		*  l10n (array) Array of strings that are used in JavaScript. This allows JS strings to be translated in PHP and loaded via:
-		*  var message = acf._e('FIELD_NAME', 'error');
+		*  var message = acf._e('sites_field', 'error');
 		*/
 		
 		$this->l10n = array(
-			'error'	=> __('Error! Please enter a higher value', 'TEXTDOMAIN'),
+			'error'	=> __('Error! Please enter a higher value', 'acf-sites-field'),
 		);
 		
 		
@@ -105,8 +105,8 @@ class NAMESPACE_acf_field_FIELD_NAME extends acf_field {
 		*/
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Font Size','TEXTDOMAIN'),
-			'instructions'	=> __('Customise the input font size','TEXTDOMAIN'),
+			'label'			=> __('Font Size','acf-sites-field'),
+			'instructions'	=> __('Customise the input font size','acf-sites-field'),
 			'type'			=> 'number',
 			'name'			=> 'font_size',
 			'prepend'		=> 'px',
@@ -139,18 +139,28 @@ class NAMESPACE_acf_field_FIELD_NAME extends acf_field {
 		*  This will show what data is available
 		*/
 		
-		echo '<pre>';
+		/*echo '<pre>';
 			print_r( $field );
-		echo '</pre>';
+		echo '</pre>';*/
 		
 		
 		/*
 		*  Create a simple text input using the 'font_size' setting.
 		*/
 		
-		?>
+		/*?>
 		<input type="text" name="<?php echo esc_attr($field['name']) ?>" value="<?php echo esc_attr($field['value']) ?>" style="font-size:<?php echo $field['font_size'] ?>px;" />
-		<?php
+		<?php*/
+		global $wpdb;
+		$sites = $wpdb->get_results("SELECT * FROM $wpdb->blogs ORDER BY path"  );
+		
+		echo '<select id="' . $field['id'] . '" class="' . $field['class'] . '" name="' . $field['name'] . '" >';	
+		
+		foreach($sites as $s){
+		
+			echo "<option value='" . $s->blog_id . "' " . selected($s->blog_id, $field['value']) . ">" . get_blog_details($s->blog_id, true)->blogname . "</option>";
+		}
+		echo "</select>";
 	}
 	
 		
@@ -178,13 +188,13 @@ class NAMESPACE_acf_field_FIELD_NAME extends acf_field {
 		
 		
 		// register & include JS
-		wp_register_script('TEXTDOMAIN', "{$url}assets/js/input.js", array('acf-input'), $version);
-		wp_enqueue_script('TEXTDOMAIN');
+		wp_register_script('acf-sites-field', "{$url}assets/js/input.js", array('acf-input'), $version);
+		wp_enqueue_script('acf-sites-field');
 		
 		
 		// register & include CSS
-		wp_register_style('TEXTDOMAIN', "{$url}assets/css/input.css", array('acf-input'), $version);
-		wp_enqueue_style('TEXTDOMAIN');
+		wp_register_style('acf-sites-field', "{$url}assets/css/input.css", array('acf-input'), $version);
+		wp_enqueue_style('acf-sites-field');
 		
 	}
 	
@@ -443,7 +453,7 @@ class NAMESPACE_acf_field_FIELD_NAME extends acf_field {
 		// Advanced usage
 		if( $value < $field['custom_minimum_setting'] )
 		{
-			$valid = __('The value is too little!','TEXTDOMAIN'),
+			$valid = __('The value is too little!','acf-sites-field'),
 		}
 		
 		
@@ -557,7 +567,7 @@ class NAMESPACE_acf_field_FIELD_NAME extends acf_field {
 
 
 // initialize
-new NAMESPACE_acf_field_FIELD_NAME( $this->settings );
+new hpu_acf_field_sites_field( $this->settings );
 
 
 // class_exists check
